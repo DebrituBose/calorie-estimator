@@ -4,13 +4,11 @@ import numpy as np
 import pandas as pd
 import io
 
-# Page config
 st.set_page_config(page_title="Calorie Estimator", page_icon="🔥", layout="wide")
 
-# --- Custom CSS with Gradient Background ---
 st.markdown("""
     <style>
-    body {
+    [data-testid="stAppViewContainer"] {
         background: linear-gradient(to right, #ffe4c4, #fffdd0);
     }
     .main {
@@ -48,7 +46,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Sidebar Info ---
 st.sidebar.title("📊 Project Info")
 st.sidebar.info("""
 **Fitness Calorie Estimator**  
@@ -58,17 +55,14 @@ st.sidebar.info("""
 📅 July 2025
 """)
 
-# --- Title ---
 st.markdown("<h1 style='text-align:center;'>🔥 Calorie Burn Estimator 🔥</h1>", unsafe_allow_html=True)
 st.write("Estimate calories burned based on workout type, your weight, and session duration.")
 
-# --- Load Model ---
 try:
     model = joblib.load('calorie_model.pkl')
 except Exception as e:
     st.error(f"❌ Model Load Error: {e}")
 
-# --- Inputs ---
 st.markdown("### 🏋️ Workout Details")
 workout_types = {
     'Cardio': 0,
@@ -84,10 +78,8 @@ with col2:
     weight = st.slider("Weight (kg)", 30.0, 200.0, 70.0)
 
 duration = st.slider("Session Duration (hours)", 0.1, 5.0, 1.0, step=0.1)
-
 st.markdown("---")
 
-# --- Prediction Using Correct Column Names ---
 if st.button("🔥 Estimate Calories Burned"):
     try:
         input_df = pd.DataFrame(
@@ -102,7 +94,6 @@ if st.button("🔥 Estimate Calories Burned"):
             </div>
         """, unsafe_allow_html=True)
 
-        # --- Chart ---
         st.markdown("### 📊 Estimated Calories Comparison")
         chart_data = {
             'Workout Type': ['Cardio', 'Strength', 'Yoga', 'HIIT'],
@@ -116,7 +107,6 @@ if st.button("🔥 Estimate Calories Burned"):
         df_chart = pd.DataFrame(chart_data)
         st.bar_chart(df_chart.set_index('Workout Type'))
 
-        # --- Download Report ---
         st.markdown("### 📥 Download Your Report")
         report = f"""
 Workout: {workout}
@@ -129,9 +119,9 @@ Calories Burned: {calories:.2f} kcal
     except Exception as e:
         st.error(f"Prediction failed: {e}")
 
-# --- Footer ---
 st.markdown("""
 <div class="footer">
 Made with ❤️ using Streamlit | © Debritu Bose, Sudipta Halder, Antarika Banerjee, Roopsha
 </div>
 """, unsafe_allow_html=True)
+
