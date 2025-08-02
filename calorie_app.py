@@ -4,20 +4,15 @@ import numpy as np
 import pandas as pd
 import io
 
-
 st.set_page_config(page_title="Calorie Estimator", page_icon="🔥", layout="wide")
 
 st.markdown("""
     <style>
     body {
-        background-image: url(https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=1920&q=80
-)
-);
-        background-size: cover;
-        background-attachment: fixed;
+        background-color: #f4f4f4;
     }
     .main {
-        background-color: rgba(255, 255, 255, 0.88);
+        background-color: #ffffff;
         border-radius: 12px;
         padding: 20px;
         margin: 20px;
@@ -51,17 +46,15 @@ st.sidebar.info("""
 **Fitness Calorie Estimator**  
 🔍 Predict calories burned per workout.
 
-👤 **By:** Debritu Bose, Sudipta Halder, Antarika Banerjee, Roopsha 
-📅 july 2025  
+👤 **By:** Debritu Bose, Sudipta Halder, Antarika Banerjee, Roopsha  
+📅 July 2025
 """)
-st.image("https://cdn.pixabay.com/photo/2017/04/30/11/54/dumbbell-2278889_1280.png", width=150)
 
 st.markdown("<h1 style='text-align:center; color:#FF4B4B;'>🔥 Calorie Burn Estimator 🔥</h1>", unsafe_allow_html=True)
 st.write("Estimate calories burned based on workout type, your weight, and session duration.")
 
 try:
     model = joblib.load('calorie_model.pkl')
-    st.success("✅ Model loaded successfully!")
 except Exception as e:
     st.error(f"❌ Model Load Error: {e}")
 
@@ -79,14 +72,19 @@ with col1:
 with col2:
     weight = st.slider("Weight (kg)", 30.0, 200.0, 70.0)
 
-duration = st.slider("Session Duration (hours)", 0.1, 5.0, 1.0, step=0.1)
+duration = st.slider("Duration (hours)", 0.1, 5.0, 1.0, step=0.1)
 
 st.markdown("---")
 
 if st.button("🔥 Estimate Calories Burned"):
-    input_data = np.array([[workout_types[workout], weight, duration]])
     try:
-        calories = model.predict(input_data)[0]
+        # Use pandas DataFrame for model input
+        input_df = pd.DataFrame(
+            [[workout_types[workout], weight, duration]],
+            columns=['Workout_Type', 'Weight', 'Session_Duration']
+        )
+        calories = model.predict(input_df)[0]
+
         st.markdown(f"""
             <div style="background-color:#d9f9d9; padding:15px; border-radius:10px;">
             <h2 style="color:#28a745;">🔥 Estimated Calories Burned: {calories:.2f} kcal</h2>
@@ -123,4 +121,3 @@ st.markdown("""
 Made with ❤️ using Streamlit | © Debritu Bose, Sudipta Halder, Antarika Banerjee, Roopsha
 </div>
 """, unsafe_allow_html=True)
-
