@@ -4,14 +4,15 @@ import numpy as np
 import pandas as pd
 import io
 
-# Page config
+
 st.set_page_config(page_title="Calorie Estimator", page_icon="🔥", layout="wide")
 
-# --- Custom CSS with Background Image ---
 st.markdown("""
     <style>
     body {
-        background-image: url('https://images.unsplash.com/photo-1599058917212-4fcbaf0e91e3?auto=format&fit=crop&w=1920&q=80');
+        background-image: url(https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=1920&q=80
+)
+);
         background-size: cover;
         background-attachment: fixed;
     }
@@ -45,7 +46,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Sidebar Info ---
 st.sidebar.title("📊 Project Info")
 st.sidebar.info("""
 **Fitness Calorie Estimator**  
@@ -54,22 +54,17 @@ st.sidebar.info("""
 👤 **By:** Debritu Bose, Sudipta Halder, Antarika Banerjee, Roopsha 
 📅 july 2025  
 """)
+st.image("https://cdn.pixabay.com/photo/2017/04/30/11/54/dumbbell-2278889_1280.png", width=150)
 
-# --- Logo/Image (optional) ---
-st.image("https://i.imgur.com/PmYbAqF.png", width=150)  # Replace with your logo/image URL
-
-# --- Main Title ---
 st.markdown("<h1 style='text-align:center; color:#FF4B4B;'>🔥 Calorie Burn Estimator 🔥</h1>", unsafe_allow_html=True)
 st.write("Estimate calories burned based on workout type, your weight, and session duration.")
 
-# --- Load Model ---
 try:
     model = joblib.load('calorie_model.pkl')
     st.success("✅ Model loaded successfully!")
 except Exception as e:
     st.error(f"❌ Model Load Error: {e}")
 
-# --- User Inputs ---
 st.markdown("### 🏋️ Workout Details")
 workout_types = {
     'Cardio': 0,
@@ -88,7 +83,6 @@ duration = st.slider("Session Duration (hours)", 0.1, 5.0, 1.0, step=0.1)
 
 st.markdown("---")
 
-# --- Prediction ---
 if st.button("🔥 Estimate Calories Burned"):
     input_data = np.array([[workout_types[workout], weight, duration]])
     try:
@@ -99,7 +93,6 @@ if st.button("🔥 Estimate Calories Burned"):
             </div>
         """, unsafe_allow_html=True)
 
-        # --- Chart with Example Comparison ---
         st.markdown("### 📊 Estimated Calories Comparison")
         chart_data = {
             'Workout Type': ['Cardio', 'Strength', 'Yoga', 'HIIT'],
@@ -113,7 +106,6 @@ if st.button("🔥 Estimate Calories Burned"):
         df_chart = pd.DataFrame(chart_data)
         st.bar_chart(df_chart.set_index('Workout Type'))
 
-        # --- Download Report ---
         st.markdown("### 📥 Download Your Report")
         report = f"""
 Workout: {workout}
@@ -126,9 +118,9 @@ Calories Burned: {calories:.2f} kcal
     except Exception as e:
         st.error(f"Prediction failed: {e}")
 
-# --- Footer ---
 st.markdown("""
 <div class="footer">
 Made with ❤️ using Streamlit | © Debritu Bose, Sudipta Halder, Antarika Banerjee, Roopsha
 </div>
 """, unsafe_allow_html=True)
+
